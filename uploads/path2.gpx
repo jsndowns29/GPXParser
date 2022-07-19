@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<gpx xmlns="http://www.topografix.com/GPX/1/1"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd"
+version="1.1"
+creator="Topo Maps">
+<rte>
+<name>Reyn To UC1</name>
+<rtept lat="43.530912" lon="-80.229241">
+<ele>344.0</ele>
+</rtept>
+<rtept lat="43.53159" lon="-80.228733">
+<ele>341.7</ele>
+</rtept>
+<rtept lat="43.532025" lon="-80.22863">
+<ele>344.4</ele>
+</rtept>
+<rtept lat="43.532047" lon="-80.228117">
+<ele>351.3</ele>
+</rtept>
+<rtept lat="43.531878" lon="-80.227435">
+<ele>353.4</ele>
+</rtept>
+<rtept lat="43.531053" lon="-80.226785">
+<ele>348.1</ele>
+</rtept>
+<rtept lat="43.53095" lon="-80.226596">
+<ele>349.9</ele>
+</rtept>
+</rte>
+<rte>
+<name>Reyn To UC2</name>
+<rtept lat="43.530763" lon="-80.229231">
+<ele>354.0</ele>
+</rtept>
+<rtept lat="43.530778" lon="-80.2293">
+<ele>349.6</ele>
+</rtept>
+<rtept lat="43.531014" lon="-80.229122">
+<ele>346.9</ele>
+</rtept>
+<rtept lat="43.53131" lon="-80.228813">
+<ele>349.9</ele>
+</rtept>
+<rtept lat="43.532245" lon="-80.228559">
+<ele>340.8</ele>
+</rtept>
+<rtept lat="43.533174" lon="-80.227589">
+<ele>351.0</ele>
+</rtept>
+<rtept lat="43.532089" lon="-80.22648">
+<ele>332.5</ele>
+</rtept>
+<rtept lat="43.531751" lon="-80.225912">
+<ele>331.4</ele>
+</rtept>
+<rtept lat="43.531209" lon="-80.226109">
+<ele>337.6</ele>
+</rtept>
+<rtept lat="43.530878" lon="-80.226389">
+<ele>329.2</ele>
+</rtept>
+</rte>
+</gpx>

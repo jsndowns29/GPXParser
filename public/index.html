@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>CIS*2750: A4</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Assignment 4">
+    <meta name="keywords" content="CHANGE ME">
+    <meta name="author" content="Jason Downs">
+    <!-- Load jquery, bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="/style.css">
+    <!-- Custom CSS End -->
+</head>
+<body>
+
+  <!--FILE LOG PANEL ------------------------------------------------------------------------------------------>
+    <h1>File Log Panel</h1>
+    <div class = "fileLogPanel">
+      <table class = "table table-sm table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>File name (click to download)</th>
+            <th>Version</th>
+            <th>Creator</th>
+            <th>Number of waypoints</th>
+            <th>Number of routes</th>
+            <th>Number of tracks</th>
+          </tr>
+        </thead>
+        <tbody id="fileLogBody">
+        </tbody>
+      </table>
+      <form ref='uploadForm'
+      id='uploadForm'
+        action='/upload'
+        method='post'
+        encType="multipart/form-data">
+        <div class="form-group">
+          <input type="file" name="uploadFile" class="btn btn-secondary">
+          <input type='submit' value='Upload' class="btn btn-secondary">
+        </div>
+      </form>
+    </div>
+  <!--GPX VIEW PANEL ------------------------------------------------------------------------------------------>
+  <h1>GPX View Panel</h1>
+  <div class = "GPXViewPanel">
+    <div class = "dropdown">
+      <select id = "gpxmenu">
+        <option>Choose GPX file</option>
+      </select>
+    </div>
+    <table class = "table table-sm table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Component</th>
+          <th>Name</th>
+          <th>Number of points</th>
+          <th>Length</th>
+          <th>Loop</th>
+        </tr>
+      </thead>
+      <tbody id="GPXViewBody">
+      </tbody>
+    </table>
+  </div>
+
+  <!--OTHER DATA PANEL ------------------------------------------------------------------------------------------>
+  <h1>Other Data Panel</h1>
+  <div class = "OtherDataPanel">
+    <div class = "dropdown">
+      <select id = "OtherDatamenu">
+        <option>Choose GPX Component</option>
+      </select>
+    </div>
+    <table class = "table table-sm table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody id="OtherDataBody">
+      </tbody>
+    </table>
+  </div>
+    <!--RENAME FORM ------------------------------------------------------------------------------------------>
+  <h1>Rename Component</h1>
+  <form ref='renameForm'
+        id='renameForm'>
+        <div class="form-group">
+              <label for="renameBox">Rename the above selected GPX component: Enter new name</label>
+              <input type="text" onfocus="document.getElementById('renameForm').reset()" class="form-control" id="renameBox" placeholder="New Name">
+        </div>
+      <div class="form-group">
+          <input type='submit' class="btn btn-secondary">
+      </div>
+  </form>
+    <!--CREATE GPX FORM ------------------------------------------------------------------------------------------>
+  <h1>Create GPX File</h1>
+  <form ref='CreateGPXForm'
+        id='CreateGPXForm'>
+        <div class="form-group">
+              <label for="fileNameBox">Enter file name</label>
+              <input type="text" class="form-control" id="fileNameBox" placeholder="file name">
+              <label for="versionBox">Enter version</label>
+              <input type="text" class="form-control" id="versionBox" placeholder="version">
+              <label for="creatorBox">Enter creator</label>
+              <input type="text" class="form-control" id="creatorBox" placeholder="creator">
+        </div>
+      <div class="form-group">
+          <input type='submit' class="btn btn-secondary">
+      </div>
+  </form>
+  <!--CREATE WAYPOINT FORM ------------------------------------------------------------------------------------------>
+  <h1>Add Route To Selected GPX File</h1>
+  <h4>Add waypoints before creating route</h4>
+  <form ref='CreateWaypointForm'
+        id='CreateWaypointForm'>
+        <div class="form-group">
+              <label for="latBox">Enter latitude</label>
+              <input type="text" class="form-control" id="latBox" placeholder="latitude">
+              <label for="longBox">Ente longitude</label>
+              <input type="text" class="form-control" id="longBox" placeholder="longitude">
+        </div>
+      <div class="form-group">
+          <input type='submit' class="btn btn-secondary">
+          <button onClick="clearWpts()" type="button" class="btn btn-secondary">Clear</button>
+          <button onClick="displayWpts()" type="button" class="btn btn-secondary">display waypoints</button>
+      </div>
+  </form>
+<!--CREATE ROUTE FORM ------------------------------------------------------------------------------------------>
+  <h4>Add waypoints to route and add route to currently selected GPX file </h4>
+  <form ref='CreateRouteForm'
+        id='CreateRouteForm'>
+        <div class="form-group">
+              <label for="routeNameBox">Enter route name</label>
+              <input type="text" class="form-control" id="routeNameBox" placeholder="route name">
+        </div>
+      <div class="form-group">
+          <input type='submit' class="btn btn-secondary">
+      </div>
+  </form>
+  <!---FIND PATH BETWEEN ------------------------------------------------------------------------------------------>
+  <h1>Find path between</h1>
+  <form ref='FindPathForm'
+        id='FindPathForm'>
+        <div class="form-group">
+              <label for="startLatBox">Enter starting latitude</label>
+              <input type="text" class="form-control" id="startLatBox" placeholder="starting lat">
+              <label for="startLongBox">Enter starting longitude</label>
+              <input type="text" class="form-control" id="startLongBox" placeholder="starting long">
+              <label for="endLatBox">Enter ending latitude</label>
+              <input type="text" class="form-control" id="endLatBox" placeholder="Ending lat">
+              <label for="endLongBox">Enter ending longitude</label>
+              <input type="text" class="form-control" id="endLongBox" placeholder="Ending long">
+
+        </div>
+      <div class="form-group">
+          <input type='submit' class="btn btn-secondary">
+      </div>
+  </form>
+
+  <div class = "displayPathsPanel">
+    <table class = "table table-sm table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Component</th>
+          <th>Name</th>
+          <th>Number of points</th>
+          <th>Length</th>
+          <th>Loop</th>
+        </tr>
+      </thead>
+      <tbody id="displayPathsBody">
+      </tbody>
+    </table>
+  </div>
+
+  <!--LOGIN TO DATABASE ------------------------------------------------------------------------------------------>
+    <h1>FINAL PROJECT: DATABASE FUNCTIONALITY </h1>
+    <h2>Login to DB </h2>
+    <form ref='LoginForm'
+          id='LoginForm'>
+          <div class="form-group">
+                <label for="userNameBox">Enter username</label>
+                <input type="text" class="form-control" id="userNameBox" placeholder="username">
+                <label for="passwordBox">Enter password</label>
+                <input type="password" class="form-control" id="passwordBox" placeholder="password">
+                <label for="dataBaseBox">database name</label>
+                <input type="text" class="form-control" id="dataBaseBox" placeholder="database name">
+          </div>
+        <div class="form-group">
+            <input type='submit' class="btn btn-secondary">
+        </div>
+    </form>
+    <div id="dbStuff">
+  <!--POPULATE DATABASE ------------------------------------------------------------------------------------------>
+    <h2>Populate Database </h2>
+    <form ref='populateDBForm'
+          id='populateDBForm'>
+          <div class="form-group">
+
+          </div>
+        <div class="form-group">
+            <input type='submit' class="btn btn-secondary">
+        </div>
+    </form>
+  <!--CLEAR DATABASE ------------------------------------------------------------------------------------------>
+    <h2>Clear Database </h2>
+    <form ref='clearDBForm'
+          id='clearDBForm'>
+          <div class="form-group">
+
+          </div>
+        <div class="form-group">
+            <input type='submit' class="btn btn-secondary">
+        </div>
+    </form>
+    <!--DATABASE STATUS ------------------------------------------------------------------------------------------>
+      <h2>Get Database Status</h2>
+      <form ref='statusDBForm'
+            id='statusDBForm'>
+            <div class="form-group">
+
+            </div>
+          <div class="form-group">
+              <input type='submit' class="btn btn-secondary">
+          </div>
+      </form>
+
+      <!--Query 1 ------------------------------------------------------------------------------------------>
+      <h1>Query 1: Display all routes</h1>
+      <h7>Query will execute on selection from the dropdown menu below:</h7>
+      <div class = "Query1Panel">
+        <div class = "dropdown">
+          <select id = "Query1menu">
+            <option>Sort by:</option>
+            <option onclick="query1Name()">name</option>
+            <option onclick="query1Len()">length</option>
+          </select>
+        </div>
+        <table class = "table table-sm table-bordered table-striped">
+          <thead>
+            <tr>
+              <th>route_name</th>
+              <th>route_len</th>
+            </tr>
+          </thead>
+          <tbody id="Query1Body">
+          </tbody>
+        </table>
+      </div>
+      <!--Query 2 ------------------------------------------------------------------------------------------>
+      <h1>Query 2: Display all routes from specific file</h1>
+      <div class = "Query2Panel">
+        <div class = "dropdown">
+          <select id = "pickFilemenu">
+            <option>Choose file</option>
+          </select>
+        </div>
+        <h7>Query will execute on selection from the dropdown menu below:</h7>
+        <div class = "dropdown">
+          <select id = "Query2menu">
+            <option>Sort by:</option>
+            <option onclick="query2Name()">name</option>
+            <option onclick="query2Len()">length</option>
+          </select>
+        </div>
+        <table class = "table table-sm table-bordered table-striped">
+          <thead>
+            <tr>
+              <th>file_name</th>
+              <th>route_name</th>
+              <th>route_len</th>
+            </tr>
+          </thead>
+          <tbody id="Query2Body">
+          </tbody>
+        </table>
+      </div>
+      <!--Query 3 ------------------------------------------------------------------------------------------>
+      <h1>Query 3: Display all points from specific route</h1>
+      <div class = "Query3Panel">
+        <div class = "dropdown">
+          <select id = "pickFilemenu2">
+            <option>Choose file</option>
+          </select>
+        </div>
+        <h7>Query will execute on selection from the dropdown menu below:</h7>
+        <div class = "dropdown">
+          <select id = "pickRoutemenu">
+            <option>Choose Route</option>
+          </select>
+        </div>
+        <table class = "table table-sm table-bordered table-striped">
+          <thead>
+            <tr>
+              <th>point_index</th>
+              <th>point_name</th>
+              <th>latitude</th>
+              <th>longitude</th>
+            </tr>
+          </thead>
+          <tbody id="Query3Body">
+          </tbody>
+        </table>
+      </div>
+      <!--Query 4 ------------------------------------------------------------------------------------------>
+      <h1>Query 4: Display all points from specific file</h1>
+      <div class = "Query4Panel">
+        <div class = "dropdown">
+          <select id = "pickFilemenu3">
+            <option>Choose file</option>
+          </select>
+        </div>
+        <h7>Query will execute on selection from the dropdown menu below:</h7>
+        <div class = "dropdown">
+          <select id = "Query4menu">
+            <option>Sort by:</option>
+            <option onclick="getPointsForFileName()">route name</option>
+            <option onclick="getPointsForFileLen()">route length</option>
+          </select>
+        </div>
+        <table class = "table table-sm table-bordered table-striped">
+          <thead>
+            <tr>
+              <th>file_name</th>
+              <th>route_name</th>
+              <th>route_len</th>
+              <th>point_index</th>
+              <th>latitude</th>
+              <th>longitude</th>
+            </tr>
+          </thead>
+          <tbody id="Query4Body">
+          </tbody>
+        </table>
+      </div>
+      <!--Query 2 ------------------------------------------------------------------------------------------>
+      <h1>Query 5: Display N shortest/longest routes from specific file</h1>
+      <div class = "Query5Panel">
+        <div class = "dropdown">
+          <select id = "pickFilemenu4">
+            <option>Choose file</option>
+          </select>
+        </div>
+        <label for="nBox">input N</label>
+        <input type="text" class="form-control" id="nBox" placeholder="N">
+        <div class = "dropdown">
+          <select id = "longOrShortmenu">
+            <option>longest/shortest:</option>
+            <option>shortest</option>
+            <option>longest</option>
+          </select>
+        </div>
+        <h7>Query will execute on selection from the dropdown menu below:</h7>
+        <div class = "dropdown">
+          <select id = "Query5menu">
+            <option>Sort by:</option>
+            <option onclick="query5Len()">length</option>
+            <option onclick="query5Name()">name</option>
+          </select>
+        </div>
+        <table class = "table table-sm table-bordered table-striped">
+          <thead>
+            <tr>
+              <th>file_name</th>
+              <th>route_name</th>
+              <th>route_len</th>
+            </tr>
+          </thead>
+          <tbody id="Query5Body">
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+
+    <!-- Leave me at the bottom of body -->
+    <script src="/index.js"></script>
+</body>
+</html>
